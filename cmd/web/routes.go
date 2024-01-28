@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	"snippetbox.karen.kz/ui"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 )
@@ -13,7 +15,7 @@ func (app *application) routes() http.Handler {
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		app.notFound(w)
 	})
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
+	fileServer := http.FileServer(http.FS(ui.Files))
 	router.Handler(http.MethodGet, "/static/*filepath",
 		http.StripPrefix("/static", fileServer))
 
